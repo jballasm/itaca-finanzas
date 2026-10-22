@@ -152,7 +152,9 @@ Detectar el formato buscando la **fila de encabezados** (no asumir número de fi
 
 1. Al importar, para cada movimiento se busca una regla con la misma `clave` y `tipo`.
 2. Confianza = `confirmaciones / (confirmaciones + correcciones)`.
-   - Regla con confianza ≥ 0,8 y ≥ 2 confirmaciones → `estado = sugerido` (precargado, se confirma en bloque).
+   - Regla con confianza ≥ 0,8 y ≥ 2 confirmaciones:
+     - si es **Ítaca** → `estado = sugerido` (precargado, se confirma en bloque);
+     - si es **No es de Ítaca** → `estado = confirmado` directo (no pasa por Revisar; así lo muestra el render de Subir cartola: «Reconocidos: No es de Ítaca»).
    - Sin regla o confianza baja → `estado = por_revisar`.
 3. Cuando Tere confirma un movimiento, se crea la regla o se suma `confirmaciones`.
 4. Cuando corrige una sugerencia, se suma `correcciones` y se actualiza la regla a su nueva decisión.
