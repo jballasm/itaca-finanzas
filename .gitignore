@@ -8,6 +8,9 @@ dist
 *.xlsx
 *.xls
 *.csv
+*.pdf
+# Carpeta local para cartolas reales de prueba (nunca se sube)
+privado/
 
 .DS_Store
 Thumbs.db
