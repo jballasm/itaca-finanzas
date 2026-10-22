@@ -7,7 +7,9 @@ import { Inicio } from './pages/Inicio'
 import { Login } from './pages/Login'
 import { Movimientos } from './pages/Movimientos'
 import { Revisar } from './pages/Revisar'
-import { Ajustes, Catalogo, Nuevo, Reportes } from './pages/Secciones'
+import { Reportes } from './pages/Reportes'
+import { Ajustes, Catalogo, Nuevo } from './pages/Secciones'
+import { MesProvider } from './reportes/datos'
 import { Subir } from './pages/Subir'
 import { Venta } from './pages/Venta'
 
@@ -47,9 +49,11 @@ function Rutas() {
 export default function App() {
   return (
     <AuthProvider>
-      <HashRouter>
-        <Rutas />
-      </HashRouter>
+      <MesProvider>
+        <HashRouter>
+          <Rutas />
+        </HashRouter>
+      </MesProvider>
     </AuthProvider>
   )
 }

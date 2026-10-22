@@ -38,15 +38,6 @@ export function Nuevo() {
   )
 }
 
-export function Reportes() {
-  return (
-    <Pantalla>
-      <Encabezado titulo="Reportes" volver={false} />
-      <Proximamente texto="Ganancia neta por mes, gastos por categoría y ventas por producto." />
-    </Pantalla>
-  )
-}
-
 export function Catalogo() {
   return (
     <Pantalla>

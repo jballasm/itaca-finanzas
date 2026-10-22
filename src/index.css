@@ -16,6 +16,12 @@
   --alerta: #c08a2b;
   --alerta-suave: #f6e9cf;
   --alerta-texto: #9a6b14;
+  --terracota-suave: #e3b8a6;
+  /* Categorías de producto en gráficos (validadas con dataviz/validate_palette). */
+  --cat-1: #b06a2a;
+  --cat-2: #2f74a6;
+  --cat-3: #c49a1c;
+  --cat-4: #8e4a86;
   color-scheme: light;
 }
 
@@ -35,6 +41,11 @@
     --alerta: #d9a548;
     --alerta-suave: #3a2f1c;
     --alerta-texto: #e0b254;
+    --terracota-suave: #6b3a28;
+    --cat-1: #c47835;
+    --cat-2: #4a89be;
+    --cat-3: #b08a1a;
+    --cat-4: #b064a2;
     color-scheme: dark;
   }
 }
@@ -54,6 +65,7 @@
   --color-alerta: var(--alerta);
   --color-alerta-suave: var(--alerta-suave);
   --color-alerta-texto: var(--alerta-texto);
+  --color-terracota-suave: var(--terracota-suave);
 
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Jost', system-ui, sans-serif;
