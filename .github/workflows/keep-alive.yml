@@ -1,0 +1,31 @@
+name: Keep-alive Supabase
+
+# Supabase (plan gratis) pausa el proyecto tras 7 días sin actividad.
+# Cada 3 días se llama a ping(), que solo devuelve la hora del servidor.
+on:
+  schedule:
+    - cron: '17 12 */3 * *'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Llamar a ping()
+        env:
+          URL: ${{ secrets.VITE_SUPABASE_URL }}
+          KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          respuesta=$(curl -fsS --retry 3 --retry-delay 10 -X POST "$URL/rest/v1/rpc/ping" \
+            -H "apikey: $KEY" -H "Content-Type: application/json" -d '{}')
+          echo "Supabase respondió: $respuesta"
+
+      # GitHub desactiva los workflows programados de repos sin commits por 60 días.
+      # Volver a habilitarlo en cada corrida reinicia ese contador.
+      - name: Mantener activo este workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/keep-alive.yml/enable"
