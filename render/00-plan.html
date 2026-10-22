@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan Ítaca Finanzas · Ítaca Finanzas (render)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#8B6A45}a:hover{color:#3A3127}
+</style>
+</head>
+<body>
+<div style="width: 900px; height: 1784px; box-sizing: border-box; padding: 64px 72px; background: #F4EEE4; color: #3A3127; font-family: Jost, sans-serif; display: flex; flex-direction: column; gap: 40px">
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center">
+<img src="logo.png" alt="Logo Ítaca" style="width: 100px; height: 49px; object-fit: contain">
+<div style="font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 500; letter-spacing: .12em; line-height: 1">ÍTACA FINANZAS</div>
+<div style="font-size: 12px; letter-spacing: .3em; color: #6B5F51">PLAN DE CONSTRUCCIÓN · PARA APROBAR</div>
+<div style="width: 48px; height: 1px; background: #8B6A45; margin-top: 6px"></div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 12px; letter-spacing: .24em; color: #6B5F51">CÓMO LO USA TERE</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+<div style="background: #FBF8F3; border: 1px solid #DCD1C0; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><div style="font-family: 'Cormorant Garamond', serif; font-size: 30px; color: #8B6A45">1</div><div style="font-weight: 500">Sube la cartola</div><div style="font-size: 14px; color: #6B5F51; line-height: 1.45">Excel de BICE: cuenta corriente o tarjeta.</div></div>
+<div style="background: #FBF8F3; border: 1px solid #DCD1C0; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><div style="font-family: 'Cormorant Garamond', serif; font-size: 30px; color: #8B6A45">2</div><div style="font-weight: 500">La app sugiere</div><div style="font-size: 14px; color: #6B5F51; line-height: 1.45">Reconoce comercios y remitentes que ya vio.</div></div>
+<div style="background: #FBF8F3; border: 1px solid #DCD1C0; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><div style="font-family: 'Cormorant Garamond', serif; font-size: 30px; color: #8B6A45">3</div><div style="font-weight: 500">Ella confirma</div><div style="font-size: 14px; color: #6B5F51; line-height: 1.45">Ítaca o No es de Ítaca. Siempre editable.</div></div>
+<div style="background: #FBF8F3; border: 1px solid #DCD1C0; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><div style="font-family: 'Cormorant Garamond', serif; font-size: 30px; color: #8B6A45">4</div><div style="font-weight: 500">Ve sus números</div><div style="font-size: 14px; color: #6B5F51; line-height: 1.45">Ganancia, gastos y ventas por producto.</div></div>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+<div style="background: #FBF8F3; border: 1px solid #DCD1C0; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="font-size: 12px; letter-spacing: .24em; color: #6B5F51">ARQUITECTURA · COSTO $0</div>
+<div style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.45">
+<div><span style="font-weight: 500">GitHub Pages</span> — muestra la app (repo público, sin dominio propio).</div>
+<div><span style="font-weight: 500">Supabase</span> — login de Tere (email y contraseña) y base de datos. Solo ella ve sus datos.</div>
+<div><span style="font-weight: 500">En el celular</span> — se instala como app en la pantalla de inicio.</div>
+<div><span style="font-weight: 500">La cartola</span> se lee en su teléfono; el archivo nunca se sube.</div>
+<div><span style="font-weight: 500">Keep-alive</span> — tarea automática cada 3 días para que Supabase no se pause.</div>
+</div>
+</div>
+<div style="background: #FBF8F3; border: 1px solid #DCD1C0; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="font-size: 12px; letter-spacing: .24em; color: #6B5F51">DECISIONES</div>
+<div style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.45">
+<div>Lo que <span style="font-weight: 500">No es de Ítaca</span> se ignora en los resúmenes.</div>
+<div>Cada venta pide <span style="font-weight: 500">producto(s) y cantidad</span>; el monto se precarga del catálogo.</div>
+<div>Cobros: <span style="font-weight: 500">transferencia y efectivo</span>.</div>
+<div>Catálogo Edición 01 cargado; <span style="font-weight: 500">Collares y Carteras</span> como «Próximamente».</div>
+<div>Cuotas de tarjeta: cada cuota en su mes, como viene en la cartola.</div>
+</div>
+</div>
+</div>
+
+<div style="background: #3A3127; color: #F4EEE4; border-radius: 14px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<div style="font-size: 12px; letter-spacing: .24em; color: #D9CBB4">SKILLS Y HERRAMIENTAS PARA CLAUDE CODE</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 28px; font-size: 15px; line-height: 1.45">
+<div><span style="font-weight: 500">Modo plan</span> (Shift+Tab) al empezar cada fase.</div>
+<div><span style="font-weight: 500">/init</span> → CLAUDE.md con las reglas de privacidad.</div>
+<div><span style="font-weight: 500">Skill frontend-design</span> para la capa visual (si está instalado).</div>
+<div><span style="font-weight: 500">GitHub CLI (gh)</span> — repo, Pages y Actions.</div>
+<div><span style="font-weight: 500">MCP de Supabase</span> (opcional) — crear tablas y permisos desde Claude Code.</div>
+<div><span style="font-weight: 500">Vite + React + TypeScript + Tailwind</span></div>
+<div><span style="font-weight: 500">SheetJS</span> — leer las cartolas BICE en el navegador.</div>
+<div><span style="font-weight: 500">Recharts</span> — gráficos · <span style="font-weight: 500">vite-plugin-pwa</span> — instalable.</div>
+</div>
+<div style="font-size: 13px; color: #D9CBB4; line-height: 1.5">Usados en este chat para diseñar: xlsx (formato de cartolas), frontend-design, artifact-design y dataviz. Sus reglas ya quedaron escritas en PLAN_Itaca_Finanzas.md.</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 12px; letter-spacing: .24em; color: #6B5F51">FASES</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 28px; font-size: 15px; line-height: 1.4">
+<div><span style="color: #8B6A45; font-weight: 500">01</span>  Cuenta Supabase + repo GitHub (Vicente)</div>
+<div><span style="color: #8B6A45; font-weight: 500">06</span>  Registrar ventas y efectivo</div>
+<div><span style="color: #8B6A45; font-weight: 500">02</span>  Esqueleto, login y deploy</div>
+<div><span style="color: #8B6A45; font-weight: 500">07</span>  Inicio y reportes</div>
+<div><span style="color: #8B6A45; font-weight: 500">03</span>  Tablas, permisos y catálogo inicial</div>
+<div><span style="color: #8B6A45; font-weight: 500">08</span>  Catálogo y ajustes</div>
+<div><span style="color: #8B6A45; font-weight: 500">04</span>  Lector de cartolas BICE + tests</div>
+<div><span style="color: #8B6A45; font-weight: 500">09</span>  Instalable + keep-alive</div>
+<div><span style="color: #8B6A45; font-weight: 500">05</span>  Revisar y aprender</div>
+<div><span style="color: #8B6A45; font-weight: 500">10</span>  Entrega a Tere en su celular</div>
+</div>
+</div>
+
+<div style="border: 1px solid #B0532F; border-radius: 14px; padding: 20px 24px; display: flex; flex-direction: column; gap: 8px; background: #FBF8F3">
+<div style="font-size: 12px; letter-spacing: .24em; color: #B0532F">PRIVACIDAD — REGLA FIJA</div>
+<div style="font-size: 15px; line-height: 1.5">El repositorio es público: nunca subir cartolas reales, nombres, RUT ni números de cuenta. Pruebas solo con cartolas inventadas. La llave secreta de Supabase nunca va en el código.</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px">
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 44px; border-radius: 10px; background: #F4EEE4; border: 1px solid #DCD1C0"></div><div style="font-size: 11px; color: #6B5F51">Papel</div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 44px; border-radius: 10px; background: #E9DFD0"></div><div style="font-size: 11px; color: #6B5F51">Arena</div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 44px; border-radius: 10px; background: #3A3127"></div><div style="font-size: 11px; color: #6B5F51">Tinta</div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 44px; border-radius: 10px; background: #8B6A45"></div><div style="font-size: 11px; color: #6B5F51">Tierra</div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 44px; border-radius: 10px; background: #B0532F"></div><div style="font-size: 11px; color: #6B5F51">Terracota · gastos</div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 44px; border-radius: 10px; background: #5E6C2A"></div><div style="font-size: 11px; color: #6B5F51">Oliva · ingresos</div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 44px; border-radius: 10px; background: #C08A2B"></div><div style="font-size: 11px; color: #6B5F51">Por revisar</div></div>
+</div>
+
+</div>
+</body>
+</html>

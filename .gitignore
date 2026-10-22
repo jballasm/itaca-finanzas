@@ -1,0 +1,15 @@
+node_modules
+dist
+*.local
+.env*
+!.env.example
+
+# Nunca subir cartolas ni planillas (el repo es público)
+*.xlsx
+*.xls
+*.csv
+
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

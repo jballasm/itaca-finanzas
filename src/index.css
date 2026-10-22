@@ -1,0 +1,90 @@
+@import 'tailwindcss';
+
+/* Tokens de marca Ítaca (plan §8, ajustados por render/) */
+:root {
+  --papel: #f4eee4;
+  --arena: #e9dfd0;
+  --tarjeta: #fbf8f3;
+  --tinta: #3a3127;
+  --tinta-2: #6b5f51;
+  --linea: #dcd1c0;
+  --tierra: #8b6a45;
+  --terracota: #b0532f;
+  --oliva: #5e6c2a;
+  --oliva-suave: #c9cda8;
+  --oliva-fondo: #e3e6cf;
+  --alerta: #c08a2b;
+  --alerta-suave: #f6e9cf;
+  --alerta-texto: #9a6b14;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --papel: #1f1b16;
+    --arena: #2f2922;
+    --tarjeta: #2a251f;
+    --tinta: #f1eadf;
+    --tinta-2: #b5a894;
+    --linea: #3d362d;
+    --tierra: #c49a6c;
+    --terracota: #e07f58;
+    --oliva: #a7b75f;
+    --oliva-suave: #4e5434;
+    --oliva-fondo: #343a22;
+    --alerta: #d9a548;
+    --alerta-suave: #3a2f1c;
+    --alerta-texto: #e0b254;
+    color-scheme: dark;
+  }
+}
+
+@theme {
+  --color-papel: var(--papel);
+  --color-arena: var(--arena);
+  --color-tarjeta: var(--tarjeta);
+  --color-tinta: var(--tinta);
+  --color-tinta-2: var(--tinta-2);
+  --color-linea: var(--linea);
+  --color-tierra: var(--tierra);
+  --color-terracota: var(--terracota);
+  --color-oliva: var(--oliva);
+  --color-oliva-suave: var(--oliva-suave);
+  --color-oliva-fondo: var(--oliva-fondo);
+  --color-alerta: var(--alerta);
+  --color-alerta-suave: var(--alerta-suave);
+  --color-alerta-texto: var(--alerta-texto);
+
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Jost', system-ui, sans-serif;
+}
+
+html,
+body {
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+@layer components {
+  /* Etiqueta en mayúsculas espaciadas */
+  .etiqueta {
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--tinta-2);
+  }
+  /* Cifras lineales y tabulares */
+  .cifra {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .logo-img {
+    object-fit: contain;
+  }
+  @media (prefers-color-scheme: dark) {
+    .logo-img {
+      filter: invert(1);
+    }
+  }
+}
