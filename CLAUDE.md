@@ -19,7 +19,7 @@ Vite + React + TS · Tailwind v4 (tokens en `src/index.css`) · Supabase (Auth +
 - `tests/` — fixtures generados en memoria (`tests/fixtures.ts`), nunca archivos .xlsx.
 
 ## Reglas (obligatorias)
-- **Nunca** subir cartolas reales ni datos personales (nombres, RUT, números de cuenta). El repo es **público**. `.gitignore` bloquea `*.xlsx`, `*.xls`, `*.csv` y `.env*`.
+- **Nunca** subir cartolas reales ni datos personales (nombres, RUT, números de cuenta). El repo es **público**. `.gitignore` bloquea `*.xlsx`, `*.xls`, `*.csv`, `*.pdf`, `privado/` y `.env*`. Las cartolas reales para probar van en `privado/`.
 - Pruebas solo con **datos inventados**.
 - La clave `anon` de Supabase puede ir en el frontend; la `service_role` **nunca**.
 - RLS activo en **todas** las tablas antes de cargar datos reales.
