@@ -13,7 +13,8 @@ Especificación completa: `PLAN_Itaca_Finanzas.md`. Diseño aprobado: `render/` 
 Vite + React + TS · Tailwind v4 (tokens en `src/index.css`) · Supabase (Auth + Postgres + RLS) · SheetJS (CDN 0.20.3, no la 0.18 de npm) · HashRouter · Auth con PKCE.
 
 ## Estructura
-- `src/import/` — lógica pura de cartolas: `bice.ts` (detección/parseo), `claves.ts`, `normalizar.ts`, `huella.ts`, `reglas.ts`; `importar.ts` orquesta y guarda en Supabase.
+- `src/import/` — lógica pura de cartolas: `bice.ts` (Excel: detección/parseo), `bicePdf.ts` (PDF «Estado de cuenta», valida contra el RESUMEN de cada estado), `pdfTexto.ts` (texto con posiciones; pdf.js se inyecta), `claves.ts`, `normalizar.ts`, `huella.ts`, `reglas.ts`; `importar.ts` lee Excel/PDF, filtra desde una fecha y guarda en Supabase. `pdfNavegador.ts` carga pdf.js legacy + worker solo al subir un PDF.
+- PDF soportado: «Estado de cuenta» BICE (Cuenta Vista/Corriente). La cartola impresa desde la web («Movimientos de la Cuenta») se rechaza con un mensaje.
 - `src/pages/`, `src/components/` — UI. `Icon.tsx` usa los paths SVG del render.
 - `supabase/migrations/` — SQL que se pega a mano en el SQL Editor (no hay MCP). `seed_usuario(uid)` siembra categorías y catálogo.
 - `tests/` — fixtures generados en memoria (`tests/fixtures.ts`), nunca archivos .xlsx.

@@ -171,6 +171,30 @@ function tipoPorCategoria(c: Celda): TipoMovimiento | null {
   return null
 }
 
+/** Movimiento de cuenta corriente / vista (compartido por el Excel y el PDF). */
+export function armarMovimientoCuenta(p: {
+  fecha: string
+  tipo: TipoMovimiento
+  monto: number
+  descripcion: string
+  nro: string | null
+}): MovimientoParseado {
+  const { clave, tipo: tipoDesc } = extraerClave(p.descripcion, p.tipo)
+  return {
+    fecha: p.fecha,
+    tipo: p.tipo,
+    monto: p.monto,
+    origen: 'bice_cuenta',
+    medio: p.tipo === 'ingreso' || tipoDesc === 'transferencia_enviada' ? 'transferencia' : 'debito',
+    descripcion_original: p.descripcion,
+    clave,
+    cuota: null,
+    nro_operacion: p.nro,
+    clasificacion: null,
+    estado: null,
+  }
+}
+
 function parseFila(f: Celda[], fmt: Formato): MovimientoParseado | null {
   const { col, tipo: origen } = fmt
   const fecha = parseFecha(f[col.fecha])
@@ -181,21 +205,8 @@ function parseFila(f: Celda[], fmt: Formato): MovimientoParseado | null {
   if (!fecha || monto == null || monto === 0 || !tipo || !descripcion) return null
 
   if (origen === 'bice_cuenta') {
-    const { clave, tipo: tipoDesc } = extraerClave(descripcion, tipo)
     const nro = col.nroOperacion >= 0 ? texto(f[col.nroOperacion]) : ''
-    return {
-      fecha,
-      tipo,
-      monto,
-      origen,
-      medio: tipo === 'ingreso' || tipoDesc === 'transferencia_enviada' ? 'transferencia' : 'debito',
-      descripcion_original: descripcion,
-      clave,
-      cuota: null,
-      nro_operacion: nro || null,
-      clasificacion: null,
-      estado: null,
-    }
+    return armarMovimientoCuenta({ fecha, tipo, monto, descripcion, nro: nro || null })
   }
 
   const cuota = texto(f[col.cuotas])

@@ -35,6 +35,8 @@ export function normalizarClave(texto: string): string {
 
   s = s.replace(RE_RUT, ' ')
   s = s.replace(/TASA\s+INT\.?\s*[\d.,]+\s*%?/g, ' ')
+  // Teléfonos de compras internacionales: "866-712-7753USA".
+  s = s.replace(/\b\d{3}-\d{3}-\d{4}[A-Z]{0,3}\b/g, ' ')
   // Asteriscos de pasarela ("MP *TIENDA") y puntuación suelta.
   s = s.replace(/[*_#]+/g, ' ')
   s = s.replace(/[^\w\s&.\-]/g, ' ')
@@ -46,8 +48,13 @@ export function normalizarClave(texto: string): string {
     s = s.replace(RE_PREFIJO, '').trim()
   } while (s !== previo)
 
-  // Números largos sueltos (códigos de terminal, nº de sucursal).
+  // Números largos sueltos (códigos de terminal) y nº de sucursal al final ("SANTA ISABEL 123").
   s = s.replace(/\b\d{4,}\b/g, ' ').replace(/\s+/g, ' ').trim()
+  let antes: string
+  do {
+    antes = s
+    s = s.replace(/^(.*[A-Z].*?)\s+[\d\-]{1,5}$/, '$1').trim()
+  } while (s !== antes)
 
   const sinLugar = s.replace(RE_SUFIJO, '').trim()
   // Si el texto era solo una comuna, no lo dejamos vacío.

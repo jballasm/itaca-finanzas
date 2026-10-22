@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { parseCartola } from '../src/import/bice'
 import { calcularHuellas } from '../src/import/huella'
-import { prepararImportacion } from '../src/import/importar'
+import { filtrarDesde, prepararImportacion } from '../src/import/importar'
 import { aplicarRegla, indexarReglas, type ReglaMin } from '../src/import/reglas'
 import { filasCuenta, filasTC } from './fixtures'
 
@@ -83,8 +83,10 @@ describe('prepararImportacion', () => {
     regla({ id: 'r-super', clave: 'SUPERMERCADO EJEMPLO', clasificacion: 'no_itaca', categoria_gasto_id: null, confirmaciones: 5 }),
   ]
 
+  const cuenta = parseCartola(filasCuenta)
+
   it('resume nuevos, reconocidos, sugeridos y por revisar', async () => {
-    const { resumen, nuevos } = await prepararImportacion(filasCuenta, reglas, ninguna)
+    const { resumen, nuevos } = await prepararImportacion(cuenta, reglas, ninguna)
     expect(resumen).toMatchObject({
       tipo: 'bice_cuenta',
       desde: '2026-03-02',
@@ -100,15 +102,41 @@ describe('prepararImportacion', () => {
   })
 
   it('reimportar el mismo archivo = todo duplicado', async () => {
-    const primera = await prepararImportacion(filasCuenta, [], ninguna)
+    const primera = await prepararImportacion(cuenta, [], ninguna)
     const yaGuardadas = new Set(primera.nuevos.map((m) => m.huella))
-    const { resumen, nuevos } = await prepararImportacion(filasCuenta, [], async () => yaGuardadas)
+    const { resumen, nuevos } = await prepararImportacion(cuenta, [], async () => yaGuardadas)
     expect(nuevos).toHaveLength(0)
     expect(resumen.duplicadas).toBe(9)
   })
 
   it('TC: el pago de la tarjeta se reconoce como No es de Ítaca aunque no haya reglas', async () => {
-    const { resumen } = await prepararImportacion(filasTC, [], ninguna)
+    const { resumen } = await prepararImportacion(parseCartola(filasTC), [], ninguna)
     expect(resumen).toMatchObject({ tipo: 'bice_tc', reconocidosNoItaca: 1, porRevisar: 3 })
+  })
+})
+
+describe('filtrarDesde', () => {
+  const cuenta = parseCartola(filasCuenta)
+
+  it('deja solo desde la fecha y ajusta el período', () => {
+    const r = filtrarDesde(cuenta, '2026-03-10')
+    expect(r.movimientos.every((m) => m.fecha >= '2026-03-10')).toBe(true)
+    expect(r.movimientos).toHaveLength(6)
+    expect([r.desde, r.hasta]).toEqual(['2026-03-10', '2026-03-18'])
+  })
+
+  it('sin fecha no filtra', () => {
+    expect(filtrarDesde(cuenta, null).movimientos).toHaveLength(9)
+  })
+
+  it('importar desde una fecha y después el archivo completo: lo ya importado sale como duplicado', async () => {
+    const parcial = await prepararImportacion(filtrarDesde(cuenta, '2026-03-10'), [], ninguna)
+    const guardadas = new Set(parcial.nuevos.map((m) => m.huella))
+    const { resumen } = await prepararImportacion(cuenta, [], async () => guardadas)
+    expect(resumen).toMatchObject({ nuevas: 3, duplicadas: 6 })
+  })
+
+  it('período sin movimientos: error claro', async () => {
+    await expect(prepararImportacion(filtrarDesde(cuenta, '2027-01-01'), [], ninguna)).rejects.toThrow(/No hay movimientos/)
   })
 })

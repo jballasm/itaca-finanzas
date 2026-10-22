@@ -1,7 +1,8 @@
 import { read, utils } from 'xlsx'
 import { supabase } from '../lib/supabase'
 import type { TipoCartola } from '../lib/types'
-import { ErrorCartola, parseCartola, type Filas, type MovimientoParseado } from './bice'
+import { ErrorCartola, parseCartola, type Filas, type MovimientoParseado, type ResultadoParse } from './bice'
+import { parseEstadoCuentaPdf } from './bicePdf'
 import { calcularHuellas } from './huella'
 import { aplicarRegla, indexarReglas, type Decision, type ReglaMin } from './reglas'
 
@@ -10,6 +11,7 @@ export type MovimientoAInsertar = Omit<MovimientoParseado, 'estado' | 'clasifica
 
 export interface ResumenImportacion {
   tipo: TipoCartola
+  formato: 'excel' | 'pdf'
   desde: string | null
   hasta: string | null
   filas: number
@@ -18,6 +20,11 @@ export interface ResumenImportacion {
   reconocidosNoItaca: number
   sugeridosItaca: number
   porRevisar: number
+}
+
+export interface CartolaLeida extends ResultadoParse {
+  formato: 'excel' | 'pdf'
+  archivo: string
 }
 
 /** Lee el Excel en el navegador. El archivo nunca sale del dispositivo. */
@@ -37,14 +44,35 @@ export function leerExcel(datos: ArrayBuffer): Filas {
   throw primerError ?? new ErrorCartola('El archivo está vacío.')
 }
 
-/** Parte pura: parsea, aplica reglas y separa duplicados. */
+const esPdf = (a: File) => a.type === 'application/pdf' || /\.pdf$/i.test(a.name)
+
+/** Excel o PDF → movimientos, en el dispositivo. */
+export async function leerCartola(archivo: File): Promise<CartolaLeida> {
+  const datos = await archivo.arrayBuffer()
+  if (esPdf(archivo)) {
+    // pdf.js pesa: se descarga solo si se sube un PDF.
+    const { leerPdf } = await import('./pdfNavegador')
+    return { ...parseEstadoCuentaPdf(await leerPdf(datos)), formato: 'pdf', archivo: archivo.name }
+  }
+  return { ...parseCartola(leerExcel(datos)), formato: 'excel', archivo: archivo.name }
+}
+
+/** Deja solo los movimientos desde una fecha (YYYY-MM-DD). */
+export function filtrarDesde<T extends ResultadoParse>(r: T, desde: string | null): T {
+  if (!desde) return r
+  const movimientos = r.movimientos.filter((m) => m.fecha >= desde)
+  const fechas = movimientos.map((m) => m.fecha).sort()
+  return { ...r, movimientos, desde: fechas[0] ?? null, hasta: fechas[fechas.length - 1] ?? null }
+}
+
+/** Parte pura: aplica reglas y separa duplicados. */
 export async function prepararImportacion(
-  filas: Filas,
+  cartola: ResultadoParse & { formato?: 'excel' | 'pdf' },
   reglas: ReglaMin[],
   huellasExistentes: (huellas: string[]) => Promise<Set<string>>,
 ): Promise<{ resumen: ResumenImportacion; nuevos: MovimientoAInsertar[] }> {
-  const { tipo, movimientos, desde, hasta } = parseCartola(filas)
-  if (movimientos.length === 0) throw new ErrorCartola('La cartola no tiene movimientos.')
+  const { tipo, movimientos, desde, hasta } = cartola
+  if (movimientos.length === 0) throw new ErrorCartola('No hay movimientos para importar en ese período.')
 
   const huellas = await calcularHuellas(movimientos)
   const existentes = await huellasExistentes(huellas)
@@ -65,6 +93,7 @@ export async function prepararImportacion(
     nuevos,
     resumen: {
       tipo,
+      formato: cartola.formato ?? 'excel',
       desde,
       hasta,
       filas: movimientos.length,
@@ -95,22 +124,20 @@ async function huellasEnBase(huellas: string[]): Promise<Set<string>> {
   return set
 }
 
-/** Flujo completo: leer → preparar → guardar en Supabase. */
-export async function importarCartola(archivo: File): Promise<ResumenImportacion> {
-  const filas = leerExcel(await archivo.arrayBuffer())
-
+/** Guarda en Supabase una cartola ya leída (y filtrada). */
+export async function importarCartola(cartola: CartolaLeida): Promise<ResumenImportacion> {
   const { data: reglas, error: errReglas } = await supabase
     .from('reglas')
     .select('id, clave, tipo, clasificacion, categoria_gasto_id, confirmaciones, correcciones, activa')
     .eq('activa', true)
   if (errReglas) throw errReglas
 
-  const { resumen, nuevos } = await prepararImportacion(filas, reglas as ReglaMin[], huellasEnBase)
+  const { resumen, nuevos } = await prepararImportacion(cartola, reglas as ReglaMin[], huellasEnBase)
 
   const { data: imp, error: errImp } = await supabase
     .from('importaciones')
     .insert({
-      archivo_nombre: archivo.name,
+      archivo_nombre: cartola.archivo,
       tipo: resumen.tipo,
       periodo_desde: resumen.desde,
       periodo_hasta: resumen.hasta,
