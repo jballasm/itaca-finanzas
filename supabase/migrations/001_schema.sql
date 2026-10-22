@@ -127,8 +127,12 @@ create trigger reglas_updated_at before update on public.reglas
   for each row execute function public.set_updated_at();
 
 -- ---------------------------------------------------------------------------
--- Row Level Security: cada usuaria solo ve y toca lo suyo.
+-- Permisos explícitos (el proyecto NO expone tablas nuevas automáticamente)
+-- + Row Level Security: cada usuaria solo ve y toca lo suyo.
+-- Solo el rol "authenticated" (sesión iniciada) accede; "anon" no ve tablas.
 -- ---------------------------------------------------------------------------
+grant usage on schema public to anon, authenticated;
+
 do $$
 declare t text;
 begin
@@ -136,6 +140,8 @@ begin
     'categorias_gasto', 'categorias_producto', 'productos', 'importaciones',
     'movimientos', 'venta_items', 'reglas'
   ] loop
+    execute format('revoke all on public.%I from anon', t);
+    execute format('grant select, insert, update, delete on public.%I to authenticated', t);
     execute format('alter table public.%I enable row level security', t);
     execute format('drop policy if exists "propios" on public.%I', t);
     execute format(
