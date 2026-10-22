@@ -2,6 +2,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import { Layout } from './components/Layout'
 import { Logo } from './components/ui'
+import { GastoManual } from './pages/GastoManual'
 import { Inicio } from './pages/Inicio'
 import { Login } from './pages/Login'
 import { Movimientos } from './pages/Movimientos'
@@ -34,6 +35,8 @@ function Rutas() {
         <Route path="catalogo" element={<Catalogo />} />
         <Route path="movimientos" element={<Movimientos />} />
         <Route path="venta/:id" element={<Venta />} />
+        <Route path="nuevo/venta" element={<Venta />} />
+        <Route path="nuevo/gasto" element={<GastoManual />} />
         <Route path="ajustes" element={<Ajustes />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

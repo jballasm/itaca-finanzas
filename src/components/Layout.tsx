@@ -36,13 +36,15 @@ function NavItem({ item, activo }: { item: Item; activo: boolean }) {
 export function Layout() {
   const { pathname } = useLocation()
   const activo = (i: Item) => pathname === i.to || (i.tambien ?? []).some((p) => pathname.startsWith(p))
+  // Registrar venta tiene su propio pie fijo (render 05), sin navegación.
+  const sinNav = pathname.startsWith('/venta/') || pathname === '/nuevo/venta'
 
   return (
     <div className="min-h-dvh flex flex-col max-w-[480px] mx-auto">
-      <main className="flex-1 pb-[calc(84px+env(safe-area-inset-bottom))]">
+      <main className={`flex-1 ${sinNav ? '' : 'pb-[calc(84px+env(safe-area-inset-bottom))]'}`}>
         <Outlet />
       </main>
-      <nav
+      {!sinNav && <nav
         aria-label="Navegación"
         className="fixed bottom-0 inset-x-0 z-10 bg-tarjeta border-t border-linea
           pb-[calc(10px+env(safe-area-inset-bottom))]"
@@ -63,7 +65,7 @@ export function Layout() {
             <NavItem key={i.to} item={i} activo={activo(i)} />
           ))}
         </div>
-      </nav>
+      </nav>}
     </div>
   )
 }

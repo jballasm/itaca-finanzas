@@ -16,7 +16,7 @@ function recortar(s: string, n = 48): string {
 }
 
 export function titulo(m: MovMin): string {
-  if (m.origen === 'manual') return m.nota?.trim() || (m.tipo === 'ingreso' ? 'Ingreso en efectivo' : 'Gasto manual')
+  if (m.origen === 'manual') return m.descripcion_original.trim() || (m.tipo === 'ingreso' ? 'Venta' : 'Gasto manual')
   if (m.origen === 'bice_tc') return m.clave || recortar(m.descripcion_original)
   const { tipo } = extraerClave(m.descripcion_original, m.tipo)
   if (tipo === 'compra') return m.clave

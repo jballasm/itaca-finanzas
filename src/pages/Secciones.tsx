@@ -32,8 +32,8 @@ export function Nuevo() {
     <Pantalla>
       <Encabezado titulo="Agregar" />
       <Opcion to="/subir" icon="subir" titulo="Subir cartola" detalle="Excel de BICE" />
-      <Opcion icon="mas" titulo="Venta en efectivo" detalle="Próximamente" />
-      <Opcion icon="mas" titulo="Gasto manual" detalle="Próximamente" />
+      <Opcion to="/nuevo/venta" icon="mas" titulo="Venta" detalle="En efectivo o transferencia que no está en la cartola" />
+      <Opcion to="/nuevo/gasto" icon="mas" titulo="Gasto manual" detalle="Pagado en efectivo o fuera de BICE" />
     </Pantalla>
   )
 }
