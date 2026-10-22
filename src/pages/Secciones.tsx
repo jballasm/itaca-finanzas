@@ -1,12 +1,12 @@
-// Pantallas que se construyen en fases siguientes (plan §11).
 import { Link } from 'react-router-dom'
+import { useAuth } from '../auth/AuthProvider'
 import { Icon, type NombreIcono } from '../components/Icon'
-import { BotonPrimario, Card, Encabezado, Pantalla, Proximamente } from '../components/ui'
+import { BotonPrimario, Encabezado, Pantalla } from '../components/ui'
 import { supabase } from '../lib/supabase'
 
-function Opcion({ to, icon, titulo, detalle }: { to?: string; icon: NombreIcono; titulo: string; detalle: string }) {
-  const contenido = (
-    <>
+function Opcion({ to, icon, titulo, detalle }: { to: string; icon: NombreIcono; titulo: string; detalle: string }) {
+  return (
+    <Link to={to} className="bg-tarjeta border border-linea rounded-2xl px-4 py-3.5 flex items-center gap-3 min-h-11">
       <span className="text-tierra">
         <Icon name={icon} />
       </span>
@@ -14,16 +14,8 @@ function Opcion({ to, icon, titulo, detalle }: { to?: string; icon: NombreIcono;
         <span className="text-[15px] font-medium">{titulo}</span>
         <span className="text-[13px] text-tinta-2">{detalle}</span>
       </span>
-      {to && <Icon name="siguiente" size={18} strokeWidth={2} />}
-    </>
-  )
-  const cls = 'bg-tarjeta border border-linea rounded-2xl px-4 py-3.5 flex items-center gap-3 min-h-11'
-  return to ? (
-    <Link to={to} className={cls}>
-      {contenido}
+      <Icon name="siguiente" size={18} strokeWidth={2} />
     </Link>
-  ) : (
-    <div className={`${cls} opacity-60`}>{contenido}</div>
   )
 }
 
@@ -38,26 +30,22 @@ export function Nuevo() {
   )
 }
 
-export function Catalogo() {
-  return (
-    <Pantalla>
-      <Encabezado titulo="Catálogo" volver={false} />
-      <Proximamente texto="Productos por categoría con su precio. Podrás agregar, editar o desactivar." />
-    </Pantalla>
-  )
-}
-
 export function Ajustes() {
+  const { session } = useAuth()
   return (
     <Pantalla>
       <Encabezado titulo="Ajustes" />
-      <Opcion icon="lista" titulo="Reglas aprendidas" detalle="Próximamente" />
-      <Opcion icon="lista" titulo="Categorías de gasto" detalle="Próximamente" />
-      <Card className="p-4 flex flex-col gap-3">
+      <Opcion to="/ajustes/reglas" icon="revisar" titulo="Lo que la app aprendió" detalle="Ver, cambiar o borrar reglas" />
+      <Opcion to="/ajustes/categorias" icon="lista" titulo="Categorías de gasto" detalle="Agregar, renombrar, ordenar u ocultar" />
+      <Opcion to="/catalogo" icon="catalogo" titulo="Catálogo" detalle="Productos y precios" />
+      <Opcion to="/movimientos" icon="lista" titulo="Todos los movimientos" detalle="Historial con buscador" />
+
+      <div className="mt-4 flex flex-col gap-2">
+        {session?.user.email && <p className="text-[13px] text-tinta-2 text-center">Sesión iniciada como {session.user.email}</p>}
         <BotonPrimario type="button" onClick={() => supabase.auth.signOut()}>
           Cerrar sesión
         </BotonPrimario>
-      </Card>
+      </div>
     </Pantalla>
   )
 }

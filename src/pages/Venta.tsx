@@ -19,14 +19,16 @@ const VISIBLES_POR_CATEGORIA = 4
 async function cargar(id?: string) {
   const [cats, prods, mov, items] = await Promise.all([
     supabase.from('categorias_producto').select('*').order('orden'),
-    supabase.from('productos').select('*').eq('activo', true).order('precio', { ascending: false }),
+    supabase.from('productos').select('*').order('precio', { ascending: false }),
     id ? supabase.from('movimientos').select(COLUMNAS_MOV).eq('id', id).maybeSingle() : null,
     id ? supabase.from('venta_items').select('producto_id, cantidad').eq('movimiento_id', id) : null,
   ])
   for (const r of [cats, prods, mov, items]) if (r?.error) throw r.error
+  // Desactivados no se ofrecen, salvo los que ya están en esta venta (si no, se perderían al guardar).
+  const enVenta = new Set((items?.data ?? []).map((i) => i.producto_id as string))
   return {
     categorias: cats.data as CategoriaProducto[],
-    productos: prods.data as Producto[],
+    productos: (prods.data as Producto[]).filter((p) => p.activo || enVenta.has(p.id)),
     mov: (mov?.data ?? null) as Mov | null,
     items: (items?.data ?? []) as { producto_id: string; cantidad: number }[],
   }

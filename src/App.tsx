@@ -8,7 +8,10 @@ import { Login } from './pages/Login'
 import { Movimientos } from './pages/Movimientos'
 import { Revisar } from './pages/Revisar'
 import { Reportes } from './pages/Reportes'
-import { Ajustes, Catalogo, Nuevo } from './pages/Secciones'
+import { Catalogo } from './pages/Catalogo'
+import { CategoriasGasto } from './pages/CategoriasGasto'
+import { Reglas } from './pages/Reglas'
+import { Ajustes, Nuevo } from './pages/Secciones'
 import { MesProvider } from './reportes/datos'
 import { Subir } from './pages/Subir'
 import { Venta } from './pages/Venta'
@@ -40,6 +43,8 @@ function Rutas() {
         <Route path="nuevo/venta" element={<Venta />} />
         <Route path="nuevo/gasto" element={<GastoManual />} />
         <Route path="ajustes" element={<Ajustes />} />
+        <Route path="ajustes/reglas" element={<Reglas />} />
+        <Route path="ajustes/categorias" element={<CategoriasGasto />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
