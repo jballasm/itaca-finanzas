@@ -76,6 +76,37 @@ describe('extraerClave', () => {
     ).toEqual({ clave: 'CORREOS ENVIOS SPA', tipo: 'transferencia_enviada' })
   })
 
+  describe('formato real "Transferencia de A … desde Banco X a B …"', () => {
+    const desc =
+      'Transferencia de Persona Prueba Uno Rut 11 .111.111-1 desde Banco BICE a Taller Uno Spa Rut 77.777.777-7 a Cuenta Vista de BICE, el 2026-03-16 a las 10:00:00.'
+    it('cargo → la clave es el destinatario', () => {
+      expect(extraerClave(desc, 'gasto')).toEqual({ clave: 'TALLER UNO SPA', tipo: 'transferencia_enviada' })
+    })
+    it('abono → la clave es el remitente', () => {
+      expect(extraerClave(desc, 'ingreso')).toEqual({ clave: 'PERSONA PRUEBA UNO', tipo: 'transferencia_recibida' })
+    })
+    it('funciona aunque falte la palabra Rut', () => {
+      const sinRut = 'Transferencia de Clienta Tres 33.333.333-3 desde Banco BICE a Persona Prueba Uno Rut 11.111.111-1 a Cuenta Corriente de BICE, el 2026-03-20 a las 09:00:00.'
+      expect(extraerClave(sinRut, 'ingreso').clave).toBe('CLIENTA TRES')
+    })
+  })
+
+  it('abono por transferencia de otro banco', () => {
+    expect(
+      extraerClave('Abono por transferencia de Clienta Inventada Dos Rut 22.222.222-2 desde B.Santander el 17/03/2026 a las 12:30', 'ingreso'),
+    ).toEqual({ clave: 'CLIENTA INVENTADA DOS', tipo: 'transferencia_recibida' })
+  })
+
+  it('compra con "el" pegado a la fecha', () => {
+    expect(extraerClave('Cargo por compra en LIBRERIA EJEMPLO el18/03/2026 a las 11:22:33 hrs., monto 5990.').clave).toBe(
+      'LIBRERIA EJEMPLO',
+    )
+  })
+
+  it('compra por pasarela con código pegado', () => {
+    expect(extraerClave('Cargo por compra en MERPAGO*7TIENDA el 12/02/2026 a las 10:00:00 hrs., monto 9990.').clave).toBe('7TIENDA')
+  })
+
   it('otra descripción: se normaliza completa', () => {
     expect(extraerClave('Comisión mantención')).toEqual({ clave: 'COMISION MANTENCION', tipo: 'otro' })
   })

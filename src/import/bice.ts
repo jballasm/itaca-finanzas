@@ -181,7 +181,7 @@ function parseFila(f: Celda[], fmt: Formato): MovimientoParseado | null {
   if (!fecha || monto == null || monto === 0 || !tipo || !descripcion) return null
 
   if (origen === 'bice_cuenta') {
-    const { clave, tipo: tipoDesc } = extraerClave(descripcion)
+    const { clave, tipo: tipoDesc } = extraerClave(descripcion, tipo)
     const nro = col.nroOperacion >= 0 ? texto(f[col.nroOperacion]) : ''
     return {
       fecha,

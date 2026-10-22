@@ -62,10 +62,10 @@ describe('detectarFormato', () => {
 describe('parseCartola · cuenta corriente', () => {
   const r = parseCartola(filasCuenta)
 
-  it('lee solo filas de movimientos (ignora saldo y pie)', () => {
-    expect(r.movimientos).toHaveLength(6)
+  it('lee solo filas de movimientos (ignora saldos diarios y pie)', () => {
+    expect(r.movimientos).toHaveLength(9)
     expect(r.desde).toBe('2026-03-02')
-    expect(r.hasta).toBe('2026-03-15')
+    expect(r.hasta).toBe('2026-03-18')
   })
 
   it('compra con débito', () => {
@@ -93,6 +93,22 @@ describe('parseCartola · cuenta corriente', () => {
 
   it('pasarela y comuna fuera de la clave', () => {
     expect(r.movimientos[3].clave).toBe('TIENDA DE HILOS')
+  })
+
+  it('transferencia enviada en formato real: destinatario y medio transferencia', () => {
+    expect(r.movimientos[6]).toMatchObject({ tipo: 'gasto', medio: 'transferencia', monto: 15000, clave: 'TALLER UNO SPA' })
+  })
+
+  it('abono por transferencia de otro banco', () => {
+    expect(r.movimientos[7]).toMatchObject({ tipo: 'ingreso', medio: 'transferencia', clave: 'CLIENTA INVENTADA DOS' })
+  })
+
+  it('compra con "el" pegado a la fecha', () => {
+    expect(r.movimientos[8]).toMatchObject({ tipo: 'gasto', medio: 'debito', clave: 'LIBRERIA EJEMPLO' })
+  })
+
+  it('ninguna clave queda con dígitos de fecha u hora', () => {
+    for (const m of r.movimientos) expect(m.clave).not.toMatch(/\d{2}/)
   })
 
   it('guarda la descripción original para mostrarla', () => {
@@ -133,7 +149,7 @@ describe('leerExcel (SheetJS de punta a punta)', () => {
   it('cuenta corriente', () => {
     const r = parseCartola(leerExcel(libroXlsx(filasCuenta)))
     expect(r.tipo).toBe('bice_cuenta')
-    expect(r.movimientos).toHaveLength(6)
+    expect(r.movimientos).toHaveLength(9)
   })
 
   it('tarjeta de crédito', () => {
@@ -144,7 +160,7 @@ describe('leerExcel (SheetJS de punta a punta)', () => {
 
   it('busca la hoja correcta si hay varias', () => {
     const r = parseCartola(leerExcel(libroXlsx(filasCuenta, 'Movimientos')))
-    expect(r.movimientos).toHaveLength(6)
+    expect(r.movimientos).toHaveLength(9)
   })
 
   it('error claro si no es una cartola BICE', () => {

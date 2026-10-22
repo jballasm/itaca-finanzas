@@ -88,13 +88,13 @@ describe('prepararImportacion', () => {
     expect(resumen).toMatchObject({
       tipo: 'bice_cuenta',
       desde: '2026-03-02',
-      hasta: '2026-03-15',
-      filas: 6,
-      nuevas: 6,
+      hasta: '2026-03-18',
+      filas: 9,
+      nuevas: 9,
       duplicadas: 0,
       reconocidosNoItaca: 1,
       sugeridosItaca: 1,
-      porRevisar: 4,
+      porRevisar: 7,
     })
     expect(nuevos.find((m) => m.clave === 'MERCERIA LA HEBRA')).toMatchObject({ estado: 'sugerido', regla_id: 'r-hebra' })
   })
@@ -104,7 +104,7 @@ describe('prepararImportacion', () => {
     const yaGuardadas = new Set(primera.nuevos.map((m) => m.huella))
     const { resumen, nuevos } = await prepararImportacion(filasCuenta, [], async () => yaGuardadas)
     expect(nuevos).toHaveLength(0)
-    expect(resumen.duplicadas).toBe(6)
+    expect(resumen.duplicadas).toBe(9)
   })
 
   it('TC: el pago de la tarjeta se reconoce como No es de Ítaca aunque no haya reglas', async () => {
