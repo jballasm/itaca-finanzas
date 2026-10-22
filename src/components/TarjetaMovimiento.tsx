@@ -130,6 +130,12 @@ export function TarjetaMovimiento({ mov, categorias, iguales = [], modo = 'revis
       {eleccion === 'itaca' && (
         <>
           <div className="text-[12px] tracking-[0.18em] uppercase text-tinta-2">Ítaca · ¿Qué tipo de gasto?</div>
+          {categorias.length === 0 && (
+            <p role="alert" className="text-[13px] text-terracota leading-relaxed">
+              No hay categorías de gasto creadas para tu cuenta, así que no se puede guardar como Ítaca.
+              Hay que cargar las categorías iniciales en Supabase.
+            </p>
+          )}
           <div className="flex flex-wrap gap-1.5">
             {visibles.map((c) => (
               <button
