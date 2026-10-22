@@ -71,6 +71,14 @@
   --font-sans: 'Jost', system-ui, sans-serif;
 }
 
+/* Listas desplegables nativas: sin esto, en modo oscuro el texto claro queda
+   sobre el fondo blanco del sistema. */
+select,
+select option {
+  background-color: var(--tarjeta);
+  color: var(--tinta);
+}
+
 html,
 body {
   background: var(--papel);
