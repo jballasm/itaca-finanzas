@@ -4,8 +4,11 @@ import { Layout } from './components/Layout'
 import { Logo } from './components/ui'
 import { Inicio } from './pages/Inicio'
 import { Login } from './pages/Login'
-import { Ajustes, Catalogo, Movimientos, Nuevo, Reportes, Revisar } from './pages/Secciones'
+import { Movimientos } from './pages/Movimientos'
+import { Revisar } from './pages/Revisar'
+import { Ajustes, Catalogo, Nuevo, Reportes } from './pages/Secciones'
 import { Subir } from './pages/Subir'
+import { Venta } from './pages/Venta'
 
 function Rutas() {
   const { session, cargando, recuperando } = useAuth()
@@ -30,6 +33,7 @@ function Rutas() {
         <Route path="reportes" element={<Reportes />} />
         <Route path="catalogo" element={<Catalogo />} />
         <Route path="movimientos" element={<Movimientos />} />
+        <Route path="venta/:id" element={<Venta />} />
         <Route path="ajustes" element={<Ajustes />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

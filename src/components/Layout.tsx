@@ -11,7 +11,7 @@ interface Item {
 
 const IZQ: Item[] = [
   { to: '/', label: 'Inicio', icon: 'inicio', tambien: ['/movimientos', '/ajustes'] },
-  { to: '/revisar', label: 'Revisar', icon: 'revisar', tambien: ['/subir'] },
+  { to: '/revisar', label: 'Revisar', icon: 'revisar', tambien: ['/subir', '/venta'] },
 ]
 const DER: Item[] = [
   { to: '/reportes', label: 'Reportes', icon: 'reportes' },

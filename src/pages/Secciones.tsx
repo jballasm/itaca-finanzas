@@ -27,16 +27,6 @@ function Opcion({ to, icon, titulo, detalle }: { to?: string; icon: NombreIcono;
   )
 }
 
-export function Revisar() {
-  return (
-    <Pantalla>
-      <Encabezado titulo="Revisar" volver={false} />
-      <Opcion to="/subir" icon="subir" titulo="Subir cartola" detalle="Cuenta corriente o tarjeta BICE" />
-      <Proximamente texto="Aquí vas a confirmar cada movimiento como Ítaca o No es de Ítaca." />
-    </Pantalla>
-  )
-}
-
 export function Nuevo() {
   return (
     <Pantalla>
@@ -62,15 +52,6 @@ export function Catalogo() {
     <Pantalla>
       <Encabezado titulo="Catálogo" volver={false} />
       <Proximamente texto="Productos por categoría con su precio. Podrás agregar, editar o desactivar." />
-    </Pantalla>
-  )
-}
-
-export function Movimientos() {
-  return (
-    <Pantalla>
-      <Encabezado titulo="Movimientos" />
-      <Proximamente texto="Historial con buscador y filtros." />
     </Pantalla>
   )
 }

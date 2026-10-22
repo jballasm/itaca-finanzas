@@ -61,6 +61,17 @@ export function Inicio() {
         <Icon name="siguiente" size={18} strokeWidth={2} />
       </Link>
 
+      <Link
+        to="/movimientos"
+        className="bg-tarjeta border border-linea rounded-2xl px-4 py-3.5 flex items-center gap-3 min-h-11"
+      >
+        <span className="text-tierra">
+          <Icon name="lista" />
+        </span>
+        <span className="flex-1 text-[15px] font-medium">Todos los movimientos</span>
+        <Icon name="siguiente" size={18} strokeWidth={2} />
+      </Link>
+
       <Proximamente texto="Aquí verás la ganancia neta del mes, ingresos y gastos de Ítaca, y el gráfico de los últimos 6 meses." />
     </Pantalla>
   )
