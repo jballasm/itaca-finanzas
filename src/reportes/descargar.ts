@@ -30,7 +30,9 @@ async function cargarDatos(mes: Mes): Promise<DatosReporte> {
       .then((r) => (r.ok ? r.arrayBuffer() : null))
       .catch(() => null),
   ])
-  for (const r of [orden, extra, pendientes]) if (r.error) throw r.error
+  if (orden.error) throw orden.error
+  if (extra.error) throw extra.error
+  if (pendientes.error) throw pendientes.error
 
   const hoy = new Date()
   return {
