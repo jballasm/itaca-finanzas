@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { BarraCategorias, BarrasGastos, BarrasMensuales, BarrasProductos, SelectorMes, TarjetaGrafico } from '../components/graficos'
 import { Card, Etiqueta, Pantalla } from '../components/ui'
 import { useCarga } from '../lib/datos'
-import { formatCLP } from '../lib/format'
+import { formatCLP, MESES_LARGOS } from '../lib/format'
 import { supabase } from '../lib/supabase'
 import {
   ajustesVentas, enMeses, gastosPorCategoria, rangoMeses, serieMensual, sumarMeses, totales,
@@ -12,6 +12,43 @@ import { cargarItaca, cargarNombres, useMes } from '../reportes/datos'
 import { mesesSelector } from './Inicio'
 
 type Periodo = 'mes' | '3m' | 'anio'
+
+/** Descargar o compartir el reporte del mes elegido en PDF. */
+function BotonReporte({ mes }: { mes: Mes }) {
+  const [estado, setEstado] = useState<'listo' | 'generando' | 'error' | 'hecho'>('listo')
+  const nombre = MESES_LARGOS[Number(mes.slice(5)) - 1]
+
+  async function generar() {
+    setEstado('generando')
+    try {
+      // pdf-lib se descarga solo al generar el reporte.
+      const { descargarReporte } = await import('../reportes/descargar')
+      const r = await descargarReporte(mes)
+      setEstado(r === 'cancelado' ? 'listo' : 'hecho')
+    } catch (e) {
+      console.error(e)
+      setEstado('error')
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-1">
+      <button
+        type="button"
+        onClick={generar}
+        disabled={estado === 'generando'}
+        className="h-12 rounded-xl border border-linea bg-tarjeta text-[14px] font-medium flex items-center justify-center gap-2 active:opacity-80 disabled:opacity-60"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+          <path d="M12 4v12M7 11l5 5 5-5M4 20h16" />
+        </svg>
+        {estado === 'generando' ? 'Generando PDF…' : `Descargar reporte de ${nombre} (PDF)`}
+      </button>
+      {estado === 'error' && <p className="text-[13px] text-terracota text-center">No se pudo generar el reporte. Revisa tu conexión.</p>}
+      {estado === 'hecho' && <p className="text-[12px] text-tinta-2 text-center">Listo. El reporte incluye solo lo confirmado como Ítaca.</p>}
+    </div>
+  )
+}
 
 function mesesDelPeriodo(mes: Mes, p: Periodo): Mes[] {
   if (p === 'mes') return [mes]
@@ -69,6 +106,8 @@ export function Reportes() {
           </button>
         ))}
       </div>
+
+      <BotonReporte mes={mes} />
 
       {error && (
         <Card className="p-4">
